@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Weather App</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <style>
+        span{
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+
+</head>
+<body>
+    {% extends 'base.html'  %}
+    {% block content %}
+    
+        <div class="container" style="width: 100%">
+            {% if api%}
+                {% if api == "Error" %}
+                    <span style="color: brown">Sorry, the server could not retrive the data.</span>
+                {% else %}
+                    <div class="jumbotron jumbotron-fluid">
+                        <div class="container">
+                        {% if api.1.Category.Name == 'Good' %}  
+                            <h1 class="display-4" style="color: green"> <i class="fas fa-cloud"></i>{{api.0.Category.Name}}</h1>
+                            <p>Air quality is considered satisfactory, and air pollution poses little or no risk.</p>
+                          {% elif api.1.Category.Name == 'Moderate'%}
+                            <h1 class="display-4" style="color: #d9d500"> <i class="fas fa-cloud"></i>{{api.1.Category.Name}}</h1>
+                            <p>Air quality is acceptable; however, for some pollutants there may be a moderate health concern for a very small number of people who are unusually sensitive to air pollution.</p>    
+                          {% elif api.1.Category.Name == 'Unhealthy for Sensitive Groups'%}
+                            <h1 class="display-4" style="color: orange"> <i class="fas fa-cloud"></i>{{api.1.Category.Name}}</h1>
+                            <p>Although general public is not likely to be affected at this AQI range, people with lung disease, older adults and children are at a greater risk from exposure to ozone, whereas persons with heart and lung disease, older adults and children are at greater risk from the presence of particles in the air.</p>
+                          {% elif api.1.Category.Name == 'Unhealthy'%}
+                            <h1 class="display-4" style="color: red"> <i class="fas fa-cloud"></i>{{api.1.Category.Name}}</h1>
+                            <p>Everyone may begin to experience health effects; members of sensitive groups may experience more serious health effects.</p>
+                          {% elif api.1.Category.Name == 'Very Unhealthy'%}
+                            <h1 class="display-4" style="color: purple"> <i class="fas fa-cloud"></i>{{api.1.Category.Name}}</h1>
+                            <p>Health alert: everyone may experience more serious health effects.</p>
+                          {% elif api.1.Category.Name == 'Hazardous'%}
+                            <h1 class="display-4" style="color: maroon"> <i class="fas fa-cloud"></i>{{api.1.Category.Name}}</h1>  
+                            <p>Health warnings of emergency conditions. The entire population is more likely to be affected.</p>
+                            
+                        {%endif%}
+                            <span><i class="fas fa-map-marked-alt"></i> Area: {{api.0.ReportingArea}}, {{api.0.StateCode}}</span>
+                            <span><i class="fas fa-wind"></i> Air Quality Index: {{ api.1.AQI}}</span>      
+                        </div>
+                      </div>
+                {% endif %}
+            {% endif %}    
+        </div>
+    {% endblock %}
+</body>
+</html>
